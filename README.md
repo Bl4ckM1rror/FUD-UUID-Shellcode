@@ -33,7 +33,7 @@ This shellcode injection technique comprises the following subsequent steps:
 * Uses `UuidFromStringA` to convert `UUID` strings into their binary representation and store them in the previously allocated memory.
 * Use `EnumChildWindows` to execute the payload previously loaded into memory( in step 1 )
 
-# What makes it unique/tick?
+# What makes it unique?
 * It doesn't use standard functions like `memcpy` or `WriteProcessMemory` which are known to raise alarms to AVs/EDRs, this program uses the Windows API function called `UuidFromStringA` which can be used to decode data as well as write it to memory( **Isn't that great folks?** *And please don't say "NO!"* :) ).
 * It uses the **function call obfuscation** trick to call the Windows API functions
 * Lastly, because it looks unique :) ( *Isn't it?* :) )
@@ -61,5 +61,5 @@ The binary was scanned using [antiscan.me](https://antiscan.me/scan/new/result?i
 
 ![AV Scan](https://github.com/Bl4ckM1rror/FUD-UUID-Shellcode/blob/main/antiscan.png?raw=true)
 
-## Credits
+# Credits
 https://research.nccgroup.com/2021/01/23/rift-analysing-a-lazarus-shellcode-execution-method/  
