@@ -45,7 +45,7 @@ This shellcode injection technique comprises the following subsequent steps:
 
 ## Compile
 ```sh
-x86_64-w64-mingw32-g++ -O2 fud-uuid-shc.cpp -o lazarus.exe -I/usr/share/mingw-w64/include/ -L/usr/x86_64-w64-mingw32/lib/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive -lrpcrt4
+x86_64-w64-mingw32-g++ -O2 fud-uuid-shc.cpp -o lazarus.exe -I/usr/share/mingw-w64/include/ -L/usr/x86_64-w64-mingw32/lib/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -flto -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive -lrpcrt4
 ```
 
 # Proof-of-Concept( PoC )
