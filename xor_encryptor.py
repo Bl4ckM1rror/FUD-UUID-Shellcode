@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 
 KEY = "<YOUR_XOR_KEY>"
