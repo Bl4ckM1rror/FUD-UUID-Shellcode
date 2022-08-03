@@ -1,31 +1,66 @@
+#!/usr/bin/env python3
+
 import sys
 
 KEY = "<YOUR_XOR_KEY>"
 
-def xor(data, key):
-	
-	key = str(key)
-	l = len(key)
-	output_str = ""
 
-	for i in range(len(data)):
-		current = data[i]
-		current_key = key[i % len(key)]
-		output_str += chr(ord(current) ^ ord(current_key))
-	
-	return output_str
+class XorCipher:
+    __slots__ = ("key", "_key_length", "_fname", "_ciphertext", "_plaintext")
 
-def printCiphertext(ciphertext):
-	print('{ 0x' + ', 0x'.join(hex(ord(x))[2:] for x in ciphertext) + ' };')
+    def __init__(self, filename: str, xor_key: str) -> None:
+        self.key = str(xor_key)
+        self._key_length = len(self.key)
+        self._fname = filename
+        self._ciphertext = ""
+        self._plaintext = b""
+
+    def _xor_crypt(self) -> None:
+        i = 0
+        for char in self._plaintext:
+            self._ciphertext += chr(char ^ ord(self.key[i % self._key_length]))
+            i += 1
+
+    def _print_ciphertext(self) -> None:
+        from textwrap import TextWrapper
+
+        wrapper = TextWrapper(width=56, initial_indent="\n")
+        xor_array = ("{ 0x" +
+                     ", 0x".join(hex(ord(x))[2:]
+                                 for x in self._ciphertext) + " };")
+        wrapped_xor_array = wrapper.fill(xor_array)
+        print(wrapped_xor_array)
+
+    def run(self) -> None:
+        try:
+            with open(self._fname, "rb") as fp:
+                self._plaintext = fp.read()
+        except Exception as e:
+            print(f"[-] Error with specified file({self._fname}): {e}",
+                  file=sys.stderr)
+            sys.exit(1)
+        else:
+            self._xor_crypt()
+            self._print_ciphertext()
+            return
 
 
+def main():
+    # xor key should be similar to the one in the C++ file(fud-uuid-shc.cpp). Please
+    # endeavour to change it!!
+    # Also the "file" opened by default is the file you supply at the command line
 
-try:
-    plaintext = open(sys.argv[1], "rb").read()
-except:
-    print("File argument needed! %s <raw payload file>" % sys.argv[0])
-    sys.exit()
+    # NOTE: You can port this class( XorCipher ) to your own scripts neatly.
+    try:
+        xor_crypt = XorCipher(filename=sys.argv[1], xor_key=KEY)
+    except IndexError:
+        print("[-] File argument needed! \n\t%s <file_to_xor_encrypt>" %
+              sys.argv[0],
+              file=sys.stderr)
+        sys.exit(1)
+    else:
+        xor_crypt.run()
 
 
-ciphertext = xor(plaintext, KEY)
-print('{ 0x' + ', 0x'.join(hex(ord(x))[2:] for x in ciphertext) + ' };')
+if __name__ == "__main__":
+    main()
