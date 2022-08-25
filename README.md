@@ -30,7 +30,7 @@ Another shellcode injection technique using C++ that attempts to bypass Windows 
 This shellcode injection technique comprises the following subsequent steps:
 * First things first, it allocates virtual memory for payload execution and residence via `VirtualAlloc`
 * It `xor` decrypts the payload using the `xor` key value 
-* Uses `UuidFromStringA` to convert `UUID` strings into their binary representation and store them in the previously allocated memory.
+* Uses `UuidFromStringA` to convert `UUID` strings into their binary representation and store them in the previously allocated memory. This is used to avoid the usage of suspicious APIs like `WriteProcessMemory` or `memcpy`.
 * Use `EnumChildWindows` to execute the payload previously loaded into memory( in step 1 )
 
 # What makes it unique?
@@ -45,7 +45,7 @@ This shellcode injection technique comprises the following subsequent steps:
 
 ## Compile
 ```sh
-x86_64-w64-mingw32-g++ -O2 fud-uuid-shc.cpp -o lazarus.exe -I/usr/share/mingw-w64/include/ -L/usr/x86_64-w64-mingw32/lib/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -flto -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive -lrpcrt4
+make
 ```
 
 # Proof-of-Concept( PoC )
