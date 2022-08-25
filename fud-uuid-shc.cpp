@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <cstdlib>
 #include <rpc.h>
 #include <iostream>
 #include <windows.h>
@@ -9,7 +10,8 @@
 #include <algorithm>
 #include <memoryapi.h>
 
-#pragma comment(lib, "Rpcrt4.lib")
+// Uncomment the line below if you're using Visual Studio for compiling.
+// #pragma comment(lib, "Rpcrt4.lib")
 
 BOOL (WINAPI * pMVP)(LPVOID lpAddress, SIZE_T dwSize, DWORD  flNewProtect, PDWORD lpflOldProtect);
 LPVOID (WINAPI * pMVA)(LPVOID lpAddress, SIZE_T dwSize, DWORD  flAllocationType, DWORD  flProtect);
@@ -25,7 +27,7 @@ typedef LPVOID (WINAPI * pVirtualAllocExNuma) (
 
 
 BOOL checkNUMA() {
-  LPVOID mem = NULL;
+  LPVOID mem{NULL};
   pVirtualAllocExNuma myVirtualAllocExNuma = (pVirtualAllocExNuma)GetProcAddress(GetModuleHandle("kernel32.dll"), "VirtualAllocExNuma");
   mem = myVirtualAllocExNuma(GetCurrentProcess(), NULL, 1000, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE, 0);
   if (mem != NULL) {
@@ -37,10 +39,10 @@ BOOL checkNUMA() {
 
 
 BOOL checkResources() {
-  SYSTEM_INFO s;
-  MEMORYSTATUSEX ms;
-  DWORD procNum;
-  DWORD ram;
+  SYSTEM_INFO s{};
+  MEMORYSTATUSEX ms{};
+  DWORD procNum{};
+  DWORD ram{};
 
   GetSystemInfo(&s);
   procNum = s.dwNumberOfProcessors;
@@ -102,9 +104,7 @@ int main(int argc, char* argv[])
 
   Sleep(3000);
 
-  char *mem{};
-  mem = (char *) malloc(100000000);
-
+  char *mem{(char *) malloc(100000000)};
   if (mem != NULL) 
   {
   	memset(mem, 00, 100000000);
@@ -151,6 +151,8 @@ int main(int argc, char* argv[])
 	  CloseHandle(mem);
 	
 	  return 0;
-	}
+	}else {
+    return EXIT_FAILURE;
+  }
 
 }
