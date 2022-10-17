@@ -1,14 +1,9 @@
 #include <windows.h>
 #include <cstdlib>
+#include <cstdio>
+#include <cstring>
 #include <rpc.h>
 #include <iostream>
-#include <windows.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <cstring>
-#include <algorithm>
-#include <memoryapi.h>
 
 // Uncomment the line below if you're using Visual Studio for compiling.
 // #pragma comment(lib, "Rpcrt4.lib")
