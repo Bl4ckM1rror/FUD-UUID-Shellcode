@@ -26,7 +26,7 @@ typedef LPVOID (WINAPI * pVirtualAllocExNuma) (
 );
 
 
-BOOL checkNUMA() {
+bool checkNUMA() {
   LPVOID mem{NULL};
   pVirtualAllocExNuma myVirtualAllocExNuma = (pVirtualAllocExNuma)GetProcAddress(GetModuleHandle("kernel32.dll"), "VirtualAllocExNuma");
   mem = myVirtualAllocExNuma(GetCurrentProcess(), NULL, 1000, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE, 0);
@@ -38,7 +38,7 @@ BOOL checkNUMA() {
 }
 
 
-BOOL checkResources() {
+bool checkResources() {
   SYSTEM_INFO s{};
   MEMORYSTATUSEX ms{};
   DWORD procNum{};
