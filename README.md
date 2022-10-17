@@ -39,7 +39,7 @@ This shellcode injection technique comprises the following subsequent steps:
 * Lastly, because it looks unique :) ( *Isn't it?* :) )
 
 # Important
-* You have to change the `xor` key(row 86) to what you wish. This can be done in the `./xor_encryptor.py` python3 script by changing the `KEY` variable.
+* You have to change the `xor` key(line 85) to what you wish. This also has to be done in the `./xor_encryptor.py` python3 script by changing the `KEY` variable. The keys have to match!
 * You have to change the default `executable filename` value(row 90) to your filename.
 * `mingw` was used but you can use whichever compiler you prefer. :)
 
