@@ -41,9 +41,10 @@ This shellcode injection technique comprises the following subsequent steps:
 # Important
 * You have to change the `xor` key(row 86) to what you wish. This can be done in the `./xor_encryptor.py` python3 script by changing the `KEY` variable.
 * You have to change the default `executable filename` value(row 90) to your filename.
-* The command for compiling is provided in the C++ file( *around the top* ). NB: `mingw` was used but you can use whichever compiler you prefer. :)
+* `mingw` was used but you can use whichever compiler you prefer. :)
 
 ## Compile
+* Simply run this at your terminal/shell:
 ```sh
 make
 ```
