@@ -14,3 +14,7 @@ all:
 	@printf "[+] Compiling the malware using ${CXX}...\n\n"
 	@${CXX} ${FLAGS} ${OPT_FLAGS} ${SRC_FILE} -o ${BIN_NAME} ${LIBS}
 	@printf "[+] Compiling done! \n\n\tBest of luck from: @Bl4ckMirror & @winterrdog :)"
+
+clean:
+	@printf "[+] Removing artifacts..."
+	@rm -rf ${BIN_NAME}
