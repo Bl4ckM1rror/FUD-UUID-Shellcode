@@ -16,7 +16,7 @@ Another shellcode injection technique using C++ that attempts to bypass Windows 
 
 * Then convert the shellcode( in binary/raw format ) into a `UUID` string format using the Python3 script, `bin_to_uuid.py`: 
   ```sh
-  ./bin_to_uuid.py -p shellcode.bin > uuid.txt
+  ./bin_to_uuid.py -p shellcode.bin -o uuid.txt
   ```
 
 * `xor` encrypt the `UUID` strings in the `uuid.txt` using the Python3 script, `xor_encryptor.py`. 
