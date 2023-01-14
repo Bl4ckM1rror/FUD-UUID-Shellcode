@@ -12,6 +12,10 @@
 
 #define EXE_NAME "lazarus.exe"
 
+// each single UUID string( C-style string ) comprises:
+// std uuid content( 36 characters ) + NULL terminator == 37
+#define UUID_LINE_LEN 37
+
 #define LOTS_OF_MEM 250'000'000
 
 // the MAGICAL( but random ) byte
