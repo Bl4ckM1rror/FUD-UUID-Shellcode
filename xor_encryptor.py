@@ -2,7 +2,7 @@
 
 import sys
 
-KEY = "<YOUR_XOR_KEY>"
+KEY = "CHANGEME"
 
 
 class XorCipher:

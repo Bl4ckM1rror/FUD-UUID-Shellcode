@@ -1,6 +1,10 @@
 # vscode artifacts
 .vscode
 
+# other artifacts( add whatever it's that you want to exclude from this repo )
+testing
+.gdb_history
+
 # Prerequisites
 *.d
 

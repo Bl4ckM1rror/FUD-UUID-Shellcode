@@ -16,7 +16,7 @@ def bin_to_uuid(bin_data, output=None):
                 padding = 16 - len(data_chunk)
                 data_chunk += (b'\x90' * padding)
 
-            uuid_str = "\n".join((uuid_str, f'"{UUID(bytes_le=data_chunk)}",'))
+            uuid_str = "\n".join((uuid_str, f'{UUID(bytes_le=data_chunk)}'))
 
             # read in more 16 bytes from the file
             data_chunk = fh.read(16)
