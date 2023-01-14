@@ -8,7 +8,7 @@
 #include <rpc.h>
 
 // set your xor key( it should be similar to the one you used in the "xor_encryptor.py" )
-#define XOR_KEY "<YOUR_XOR_KEY>"
+#define XOR_KEY "CHANGEME"
 
 #define EXE_NAME "lazarus.exe"
 
