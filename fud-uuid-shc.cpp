@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
                 return -2;
         }
 
-        Sleep(3000);
+        Sleep(7500); // you could use "ekko" by crack5pider for this, i'm still lazy for this
 
         char *mem{(char *)malloc(100000000)};
         if (mem != NULL)
