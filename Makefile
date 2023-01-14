@@ -4,6 +4,9 @@ FLAGS = -I/usr/share/mingw-w64/include/ -L/usr/x86_64-w64-mingw32/lib/ \
 		-s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions \
 		-fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
 OPT_FLAGS = -Ofast -flto
+DEBUG_FLAGS := 	-ggdb3 -O0 -DDEBUG -I/usr/share/mingw-w64/include/ -L/usr/x86_64-w64-mingw32/lib/ \
+				-ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions \
+				-fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
 LIBS = -lrpcrt4
 
 # Necessary File information
@@ -14,6 +17,11 @@ all:
 	@printf "[+] Compiling the malware using ${CXX}...\n\n"
 	@${CXX} ${FLAGS} ${OPT_FLAGS} ${SRC_FILE} -o ${BIN_NAME} ${LIBS}
 	@printf "[+] Compiling done! \n\n\tBest of luck from: @Bl4ckMirror & @winterrdog :)"
+
+debug:
+	@printf "[+] Compiling the debuggable malware using ${CXX}...\n\n"
+	@${CXX} ${DEBUG_FLAGS} ${SRC_FILE} -o ${BIN_NAME} ${LIBS}
+	@printf "[+] Compiling done! \n\n\tBest of debugging luck from: @Bl4ckMirror & @winterrdog :)"
 
 clean:
 	@printf "[+] Removing artifacts..."
