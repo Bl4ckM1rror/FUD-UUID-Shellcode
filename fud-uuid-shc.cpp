@@ -165,7 +165,8 @@ int main(int argc, char *argv[])
                 printf("Before xor: %s\n\n", payload);
 #endif
 
-                XOR((char *)payload, sizeof(payload), key, sizeof(key));
+                // a NULL terminator can cause very SERIOUS bugs so 1st remove it from the key
+                XOR(payload, sizeof(payload), key, (sizeof(key) - 1));
 
 #if DEBUG
                 printf("After xor: %s\n\n", payload);
