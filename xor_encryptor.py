@@ -26,7 +26,7 @@ class XorCipher:
 
         wrapper = TextWrapper(width=56, initial_indent="\n")
         xor_array = ("{ 0x" +
-                     ", 0x".join(hex(ord(x))[2:].zfill(2)
+                     ", 0x".join(hex(ord(x))[2:].zfill(2).upper()
                                  for x in self._ciphertext) + " };")
         wrapped_xor_array = wrapper.fill(xor_array)
         print(wrapped_xor_array)
