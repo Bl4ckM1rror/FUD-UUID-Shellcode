@@ -152,10 +152,11 @@ int main(int argc, char *argv[])
                 return -2;
         }
 
-        if (checkResources() == false)
-        {
-                return -2;
-        }
+        // Uncomment if you're more interested in evading code emulators
+        // if (checkResources() == false)
+        // {
+        //         return -2;
+        // }
 
         const char virtProt[15] = {'V', 'i', 'r', 't', 'u', 'a', 'l', 'P', 'r', 'o', 't', 'e', 'c', 't', 0x0};
 
