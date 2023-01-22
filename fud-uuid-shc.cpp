@@ -12,6 +12,8 @@
 
 #define EXE_NAME "lazarus.exe"
 
+#define FAKE_OFFSET 0x1f // confuse the reverse engineer till she/he laughs at people blinking
+
 // each single UUID string( C-style string ) comprises:
 // std uuid content( 36 characters ) + NULL terminator == 37
 #define UUID_LINE_LEN 37
@@ -71,10 +73,19 @@ bool checkResources()
         return true;
 }
 
-void XOR(BYTE *data, unsigned long data_len, char *key, unsigned long key_len)
+void XOR(BYTE *data, unsigned long data_len, const char *key, unsigned long key_len)
 {
-        for (unsigned long i{0x0}; i < data_len; ++i)
-                data[i] ^= key[i % key_len];
+        unsigned long i{0x0345};
+        {
+                size_t i{};
+                do
+                {
+                        i <<= FAKE_OFFSET;
+                        data[i >> FAKE_OFFSET] ^= key[(i >> FAKE_OFFSET) % key_len];
+                        i >>= FAKE_OFFSET;
+                        ++i;
+                } while (i % data_len);
+        }
 }
 
 int main(int argc, char *argv[])
