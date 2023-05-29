@@ -9,7 +9,7 @@ Another shellcode injection technique using C++ that attempts to bypass Windows 
 
 # How it works
 ## Shellcode generation
-* Firstly, generate a payload in binary format( using either `CobaltStrike` or `msfvenom` ) for instance, in `msfvenom`, you can do it like so( the payload I'm using is for **illustration** purposes, you can use whatever payload you want ):
+* Firstly, generate a payload in binary format( using either `Havoc`, `CobaltStrike` or `msfvenom` ) for instance, in `msfvenom`, you can do it like so( the payload I'm using is for **illustration** purposes, you can use whatever payload you want ):
     ```sh
     msfvenom -p windows/messagebox  -f raw -o shellcode.bin
     ```
